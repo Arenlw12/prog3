@@ -4,17 +4,25 @@ var GrassEater = require("./modules/GrassEater.js");
 var Hunter = require("./modules/Hunter.js")
 var Terminator = require("./modules/Terminator.js")
 var Titan = require("./modules/Titan.js")
+let random = require('./modules/random');
 //! Requiring modules  --  END
 
-var grassArr = [];
-var eatArr = [];
-var huntArr = [];
-var termArr = [];
-var titanArr = [];
+grassArr = [];
+eatArr = [];
+huntArr = [];
+termArr = [];
+titanArr = [];
 matrix = [];
+
 grassHashiv = 0;
+eatHashiv = 0;
+huntHashiv = 0;
+termHashiv = 0;
+titanHashiv = 0;
+time =  0;
+// time = 0
 //! Creating MATRIX -- START
-let random = require('./modules/random');
+
 function matrixGenerator(matrixSize, grass, eat, hunt, term, titan) {
     for (let i = 0; i < matrixSize; i++) {
         matrix[i] = [];
@@ -48,7 +56,7 @@ function matrixGenerator(matrixSize, grass, eat, hunt, term, titan) {
         matrix[customY][customX] = 5;
     }
 }
-matrixGenerator(10, 5, 1);
+matrixGenerator(20, 25,20,15,10,2);
 //! Creating MATRIX -- END
 
 //! SERVER STUFF  --  START
@@ -69,6 +77,7 @@ function creatingObjects() {
             if (matrix[y][x] == 2) {
                 var grassEater = new GrassEater(x, y);
                 eatArr.push(grassEater);
+                eatHashiv++
             } else if (matrix[y][x] == 1) {
                 var grass = new Grass(x, y);
                 grassArr.push(grass);
@@ -77,53 +86,83 @@ function creatingObjects() {
             else if (matrix[y][x] == 3) {
                 var hunt = new Hunter(x, y);
                 huntArr.push(hunt);
+                huntHashiv++
             }
             else if (matrix[y][x] == 4) {
                 var term = new Terminator(x, y);
                 termArr.push(term);
+                termHashiv++
             }
             else if (matrix[y][x] == 5) {
                 var titan = new Titan(x, y);
                 titanArr.push(titan);
+                titanHashiv++
             }
         }
-        }
-        
     }
+
+}
 
 creatingObjects();
 
+
 function game() {
+    time++
+    if (time <= 20) {
+        b = 2
+    }
+    else if (time <= 25) {
+        b = 8
+    }
+    else if  (time <= 35) {
+        b = 4
+    }
+    else if (time >= 36){
+        time = 0
+    }
+    console.log(b)
     if (grassArr[0] !== undefined) {
         for (var i in grassArr) {
-            grassArr[i].mul();
-        }
+            grassArr[i].mul(b);
+            }
     }
     if (eatArr[0] !== undefined) {
         for (var i in eatArr) {
             eatArr[i].eat();
         }
-        if(huntArr[0] !== undefined){
+        if (huntArr[0] !== undefined) {
             for (var i in huntArr) {
                 huntArr[i].eat();
             }
-        } 
-        if(termArr[0] !== undefined){
+        }
+        if (termArr[0] !== undefined) {
             for (var i in termArr) {
                 termArr[i].eat();
             }
         }
-        if(titanArr[0] !== undefined){
+        if (titanArr[0] !== undefined) {
             for (var i in titanArr) {
                 titanArr[i].eat();
             }
         }
     }
-
+    if (time >= 0) {
+        let b = 2
+    }
+    if (time >= 4) {
+        let b = 6
+    }
+    if (time >= 8) {
+        let b = 9
+    }
     //! Object to send
     let sendData = {
         matrix: matrix,
-        grassCounter: grassHashiv
+        grassCounter: grassHashiv,
+        eatCounter: eatHashiv,
+        huntCounter: huntHashiv,
+        termCounter: termHashiv,
+        titanCounter: titanHashiv
     }
 
     //! Send data over the socket to clients who listens "data"

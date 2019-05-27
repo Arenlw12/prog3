@@ -24,9 +24,11 @@ module.exports = class Terminator extends LiveForm {
     } 
     move() {
         this.life--;
-        let emptyCells = this.chooseCell(0);
+        let emptyCells1 = this.chooseCell(0);
+        let emptyCells2 = this.chooseCell(1);
+        let emptyCells = emptyCells1.concat(emptyCells2)
         let newCell = random(emptyCells);
-
+        
         if (newCell) {
             let x = newCell[0];
             let y = newCell[1];
@@ -70,10 +72,12 @@ module.exports = class Terminator extends LiveForm {
     }
     mul() {
         //փնտրում է դատարկ տարածք
+        
         let emptyCells = this.chooseCell(0);
         let newCell = random(emptyCells);
 
         if (newCell) {
+            termHashiv++
             let x = newCell[0];
             let y = newCell[1];
             matrix[y][x] = 4;

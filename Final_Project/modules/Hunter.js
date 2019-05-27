@@ -1,10 +1,12 @@
 var LiveForm = require("./LiveForm");
 var random = require("./random.js");
 
+
+
 module.exports = class Hunter extends LiveForm {
     constructor(x, y) {
         super(x, y);
-        this.multiply = 0;
+        this.life = 13;
     }
     getNewCoordinates() {
         this.directions = [
@@ -22,21 +24,18 @@ module.exports = class Hunter extends LiveForm {
         this.getNewCoordinates();
         return super.chooseCell(character);
     } 
-    move() {
-        this.life--;
+    mul() {
         let emptyCells = this.chooseCell(0);
         let newCell = random(emptyCells);
 
         if (newCell) {
+            huntHashiv++
             let x = newCell[0];
             let y = newCell[1];
             matrix[y][x] = 3;
-            matrix[this.y][this.x] = 0;
-            this.y = y;
-            this.x = x;
-        }
-        if (this.life < 0) {
-            this.die();
+            let hunt = new Hunter(x, y);
+            huntArr.push(hunt);
+            this.life = 6;
         }
     }
     eat() {
@@ -60,7 +59,7 @@ module.exports = class Hunter extends LiveForm {
             this.x = x;
             this.y = y;
 
-            if (this.life >= 15) {
+            if (this.life >= 17) {
                 this.mul();
             }
         }
@@ -68,22 +67,28 @@ module.exports = class Hunter extends LiveForm {
             this.move()
         }
     }
-    mul() {
-        //փնտրում է դատարկ տարածք
-        let emptyCells = this.chooseCell(0);
+    move() {
+        this.life--;
+        let emptyCells1 = this.chooseCell(0);
+        let emptyCells2 = this.chooseCell(1);
+        let emptyCells = emptyCells1.concat(emptyCells2)
         let newCell = random(emptyCells);
 
         if (newCell) {
             let x = newCell[0];
             let y = newCell[1];
             matrix[y][x] = 3;
-            let huNter = new Hunter(x, y);
-            huntArr.push(huNter);
-            this.life = 5;
+            matrix[this.y][this.x] = 0;
+            this.y = y;
+            this.x = x;
+        }
+        if (this.life < 0) {
+            this.die();
         }
     }
     die() {
         matrix[this.y][this.x] = 0;
+
         for (let i in huntArr) {
             if (huntArr[i].x == this.x && huntArr[i].y == this.y) {
                 huntArr.splice(i, 1)

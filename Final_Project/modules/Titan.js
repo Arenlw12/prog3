@@ -79,7 +79,7 @@ module.exports = class Titan extends LiveForm {
             this.x = x;
             this.y = y;
 
-            if (this.life >= 100) {
+            if (this.life >= 110) {
                 this.mul();
             }
         }
@@ -89,6 +89,7 @@ module.exports = class Titan extends LiveForm {
     }
     mul() {
         //փնտրում է դատարկ տարածք
+        titanHashiv++
         let emptyCells = this.chooseCell(0);
         let newCell = random(emptyCells);
 
@@ -98,7 +99,7 @@ module.exports = class Titan extends LiveForm {
             matrix[y][x] = 5;
             let titn = new Titan(x, y);
             titanArr.push(titn);
-            this.life = 10;
+            this.life = 20;
         }
     }
     die() {
